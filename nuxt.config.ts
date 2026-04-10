@@ -2,6 +2,10 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
+  modules: ['@pinia/nuxt'],
+  pinia: {
+    storesDirs: ['./app/stores/**'],
+  },
   runtimeConfig: {
     public: {
       api: 'https://api.redclass.redberryinternship.ge/api'
