@@ -8,6 +8,33 @@ export const useAuthStore = defineStore('auth', () => {
     });
     const isLoggedIn = computed(() => !!token.value)
 
+    async function register(form: any) {
+        try {
+            const formData = new FormData();
+
+            formData.append('username', form.username);
+            formData.append('email', form.email);
+            formData.append('password', form.password);
+            formData.append('password_confirmation', form.password_confirmation);
+
+            if (form.avatar) {
+                formData.append('avatar', form.avatar);
+            }
+
+            const response = await $fetch<any>('/register', {
+                method: 'POST',
+                baseURL: config.public.api,
+                body: formData,
+            });
+
+            user.value = response.data.user;
+            token.value = response.data.token;
+
+        } catch (error: any) {
+            console.error('რეგისტრაციის შეცდომა:', error.data || error);
+            throw error;
+        }
+    }
     async function login(credentials: any) {
         try {
             const response = await $fetch<any>('/login', {
@@ -26,6 +53,7 @@ export const useAuthStore = defineStore('auth', () => {
         user,
         isLoggedIn,
         login,
+        register,
         token
     }
 
