@@ -8,10 +8,12 @@
         </main>
         <footer-component />
         <auth-modal v-if="modalState.auth.isOpen" :modal="modalState.auth" @close="toggleModal('auth', false)" />
-
+        <profile-modal v-if="modalState.profile" @close="toggleModal('profile', false)" />
     </div>
 </template>
 <script setup lang="ts">
+import ProfileModal from '~/components/auth/profileModal.vue';
+
 
 
 const modalState = reactive({
