@@ -2,6 +2,11 @@
     <main class="home-layout">
         <HeroSlider />
 
+        <!--authorized -->
+        <CourseSection v-if="authStore.isLoggedIn" title="Continue Learning" subtitle="Pick up where you left"
+            :showSeeAll="true">
+            <InProgressCard v-for="(item, index) in inProgressCourses" :item="item" :key="index" />
+        </CourseSection>
 
         <CourseSection title="Start Learning Today"
             subtitle="Choose from our most popular courses and begin your journey" :showSeeAll="false">
@@ -9,16 +14,22 @@
         </CourseSection>
 
 
-
+        <!-- not-authorized -->
+        <CourseSection v-if="!authStore.isLoggedIn" title="Continue Learning" subtitle="Pick up where you left"
+            :showSeeAll="true" :modal="true">
+            <InProgressCard v-for="(item, index) in dummyData" :item="item" :key="index" :is-blur="true" />
+        </CourseSection>
 
     </main>
 </template>
 
 <script setup lang="ts">
 import CardComponent from '~/components/cards/CardComponent.vue';
+import InProgressCard from '~/components/cards/inProgressCard.vue';
 import CourseSection from '~/components/CourseSection.vue';
 import HeroSlider from '~/components/HeroSlider.vue';
-const isAuth = false;
+import { useAuthStore } from '~/stores/auth';
+const authStore = useAuthStore();
 const config = useRuntimeConfig();
 
 const { data, error } = await useFetch<any>('/courses/featured', {
@@ -32,6 +43,56 @@ if (data.value) {
 if (error.value) {
     console.error('შეცდომა:', error.value);
 }
+const { data: inProgressCourses } = await useFetch('/courses/in-progress', {
+    baseURL: config.public.api as string,
+    headers: {
+        Authorization: `Bearer ${authStore.token}`,
+        Accept: 'application/json'
+    },
+    transform: (res: any) => {
+        return res.data || res;
+    }
+});
+
+const dummyData = [
+    {
+        course: {
+            image: '/img/68f543f056a30e3d5f099b8e3ec05e5d2a403872.png',
+            instructor: {
+                name: 'John Doe'
+            },
+            title: 'Advanced React & TypeScript Development',
+
+        },
+
+        progress: 65
+    },
+    {
+        course: {
+            image: '/img/8584b867d5528160322fe2dc7fe7c6da6d295c19.png',
+            instructor: {
+                name: 'Jane Smith'
+            },
+            title: 'Mastering Vue.js 3',
+
+        },
+
+
+        progress: 40
+    },
+    {
+        course: {
+            image: '/img/dfc2fadfbba911a1a07ab99c2358a787702a63cc.png',
+            instructor: {
+                name: 'Emily Johnson'
+            },
+            title: 'Full-Stack Web Development with Node.js',
+
+        },
+
+        progress: 80
+    }
+];
 </script>
 
 <style scoped>
