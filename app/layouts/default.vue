@@ -9,11 +9,12 @@
         <footer-component />
         <auth-modal v-if="modalState.auth.isOpen" :modal="modalState.auth" @close="toggleModal('auth', false)" />
         <profile-modal v-if="modalState.profile" @close="toggleModal('profile', false)" />
+        <Enrolled-courses :state="modalState.enrollment" @close="toggleModal('enrollment', false)" />
     </div>
 </template>
 <script setup lang="ts">
 import ProfileModal from '~/components/auth/profileModal.vue';
-
+import EnrolledCourses from '~/components/EnrolledCourses.vue';
 
 
 const modalState = reactive({
