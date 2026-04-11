@@ -36,20 +36,33 @@
 
                 <div class="profile-icon" v-if="authStore.isLoggedIn">
                     <div class="profile-icon" @click="triggerModal('profile')">
-                        <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path class="bg-circle"
-                                d="M0 28C0 12.536 12.536 0 28 0C43.464 0 56 12.536 56 28C56 43.464 43.464 56 28 56C12.536 56 0 43.464 0 28Z"
-                                fill="#EEEDFC" />
+                        <div class="avatar-wrapper">
+                            <img v-if="authStore.user?.avatar" :src="authStore.user?.avatar" alt="Avatar"
+                                class="avatar-img">
+                            <svg v-else width="56" height="56" viewBox="0 0 56 56" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path class="bg-circle"
+                                    d="M0 28C0 12.536 12.536 0 28 0C43.464 0 56 12.536 56 28C56 43.464 43.464 56 28 56C12.536 56 0 43.464 0 28Z"
+                                    fill="#EEEDFC" />
 
-                            <path
-                                d="M39.0832 42.25V39.0833C39.0832 37.4036 38.4159 35.7927 37.2282 34.605C36.0404 33.4173 34.4295 32.75 32.7498 32.75H23.2498C21.5701 32.75 19.9592 33.4173 18.7715 34.605C17.5838 35.7927 16.9165 37.4036 16.9165 39.0833V42.25"
-                                stroke="#736BEA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                            <path
-                                d="M27.9998 26.4167C31.4976 26.4167 34.3332 23.5811 34.3332 20.0833C34.3332 16.5855 31.4976 13.75 27.9998 13.75C24.502 13.75 21.6665 16.5855 21.6665 20.0833C21.6665 23.5811 24.502 26.4167 27.9998 26.4167Z"
-                                stroke="#736BEA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                                <path
+                                    d="M39.0832 42.25V39.0833C39.0832 37.4036 38.4159 35.7927 37.2282 34.605C36.0404 33.4173 34.4295 32.75 32.7498 32.75H23.2498C21.5701 32.75 19.9592 33.4173 18.7715 34.605C17.5838 35.7927 16.9165 37.4036 16.9165 39.0833V42.25"
+                                    stroke="#736BEA" stroke-width="2.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path
+                                    d="M27.9998 26.4167C31.4976 26.4167 34.3332 23.5811 34.3332 20.0833C34.3332 16.5855 31.4976 13.75 27.9998 13.75C24.502 13.75 21.6665 16.5855 21.6665 20.0833C21.6665 23.5811 24.502 26.4167 27.9998 26.4167Z"
+                                    stroke="#736BEA" stroke-width="2.5" stroke-linecap="round"
+                                    stroke-linejoin="round" />
 
-                            <circle cx="48.5" cy="48.5" r="6.5" fill="#F4A316" stroke="white" stroke-width="2" />
-                        </svg>
+                            </svg>
+
+                            <svg class="status-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="9" cy="9" r="8"
+                                    :fill="authStore.user.profileComplete ? '#1DC31D' : '#F4A316'" stroke="white"
+                                    stroke-width="2" />
+                            </svg>
+                        </div>
                     </div>
                 </div>
                 <div class="cta-buttons" v-if="!authStore.isLoggedIn">
@@ -144,6 +157,27 @@ const triggerModal = (name: keyof typeof modalActions, type?: 'login' | 'registe
     align-items: center;
 }
 
+.avatar-wrapper {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    display: inline-block;
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.status-icon {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+
+}
+
 .profile-icon {
     display: inline-flex;
     cursor: pointer;
@@ -160,12 +194,6 @@ const triggerModal = (name: keyof typeof modalActions, type?: 'login' | 'registe
 .profile-icon:hover .bg-circle {
     stroke: #B7B3F4;
     stroke-width: 1.5px;
-}
-
-.profile-icon img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
 }
 
 .cta-buttons {
