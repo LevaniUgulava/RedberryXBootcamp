@@ -42,8 +42,32 @@
                             </div>
                             <div class="form">
                                 <span :class="{ 'error-input': errors.password }">Password*</span>
-                                <input :class="{ 'error-input': errors.password }" v-model="form.password"
-                                    placeholder="Password">
+                                <div class="input-wrap">
+                                    <input :class="{ 'error-input': errors.password }"
+                                        :type="showPassword ? 'text' : 'password'" v-model="form.password"
+                                        placeholder="Password">
+                                    <div class="icon-container" :class="{ 'icon-error': errors.password }"
+                                        @click="showPassword = !showPassword">
+                                        <svg class="icon" width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M1.05938 11.348C0.980208 11.1235 0.980208 10.8765 1.05938 10.652C1.83045 8.68365 3.13931 7.00069 4.82002 5.81644C6.50073 4.6322 8.47759 4 10.5 4C12.5224 4 14.4993 4.6322 16.18 5.81644C17.8607 7.00069 19.1695 8.68365 19.9406 10.652C20.0198 10.8765 20.0198 11.1235 19.9406 11.348C19.1695 13.3163 17.8607 14.9993 16.18 16.1836C14.4993 17.3678 12.5224 18 10.5 18C8.47759 18 6.50073 17.3678 4.82002 16.1836C3.13931 14.9993 1.83045 13.3163 1.05938 11.348Z"
+                                                stroke="currentColor" stroke-width="1.3" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+
+                                            <path
+                                                d="M10.5001 14.0005C12.0741 14.0005 13.35 12.6573 13.35 11.0003C13.35 9.34326 12.0741 8 10.5001 8C8.92619 8 7.65027 9.34326 7.65027 11.0003C7.65027 12.6573 8.92619 14.0005 10.5001 14.0005Z"
+                                                stroke="currentColor" stroke-width="1.3" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+
+                                            <line v-if="!showPassword" x1="3" y1="3" x2="19" y2="19"
+                                                stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                                        </svg>
+                                    </div>
+
+                                </div>
+
+
                                 <span v-if="errors.password" class="error-message">{{ errors.password[0] }}</span>
                             </div>
                         </div>
@@ -67,14 +91,57 @@
                         <div class="input-step" v-if="current_step == 2">
                             <div class="form">
                                 <span :class="{ 'error-input': errors.password }">Password*</span>
-                                <input :class="{ 'error-input': errors.password }" v-model="form.password"
-                                    placeholder="Password">
+                                <div class="input-wrap">
+                                    <input :class="{ 'error-input': errors.password }"
+                                        :type="showPassword ? 'text' : 'password'" v-model="form.password"
+                                        placeholder="Password">
+                                    <div class="icon-container" :class="{ 'icon-error': errors.password }"
+                                        @click="showPassword = !showPassword">
+                                        <svg class="icon" width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M1.05938 11.348C0.980208 11.1235 0.980208 10.8765 1.05938 10.652C1.83045 8.68365 3.13931 7.00069 4.82002 5.81644C6.50073 4.6322 8.47759 4 10.5 4C12.5224 4 14.4993 4.6322 16.18 5.81644C17.8607 7.00069 19.1695 8.68365 19.9406 10.652C20.0198 10.8765 20.0198 11.1235 19.9406 11.348C19.1695 13.3163 17.8607 14.9993 16.18 16.1836C14.4993 17.3678 12.5224 18 10.5 18C8.47759 18 6.50073 17.3678 4.82002 16.1836C3.13931 14.9993 1.83045 13.3163 1.05938 11.348Z"
+                                                stroke="currentColor" stroke-width="1.3" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+
+                                            <path
+                                                d="M10.5001 14.0005C12.0741 14.0005 13.35 12.6573 13.35 11.0003C13.35 9.34326 12.0741 8 10.5001 8C8.92619 8 7.65027 9.34326 7.65027 11.0003C7.65027 12.6573 8.92619 14.0005 10.5001 14.0005Z"
+                                                stroke="currentColor" stroke-width="1.3" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+
+                                            <line v-if="!showPassword" x1="3" y1="3" x2="19" y2="19"
+                                                stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                                        </svg>
+                                    </div>
+                                </div>
                                 <span v-if="errors.password" class="error-message">{{ errors.password[0] }}</span>
                             </div>
                             <div class="form">
-                                <span :class="{ 'error-input': errors.password_confirmation }">Confirm Password*</span>
-                                <input :class="{ 'error-input': errors.password_confirmation }"
-                                    v-model="form.password_confirmation" placeholder="Password">
+                                <span :class="{ 'error-input': errors.password_confirmation }">Confirm
+                                    Password*</span>
+                                <div class="input-wrap">
+                                    <input :class="{ 'error-input': errors.password_confirmation }"
+                                        :type="showPassword_confirmation ? 'text' : 'password'" v-model="form.password_confirmation"
+                                        placeholder="Confirm Password">
+                                    <div class="icon-container" :class="{ 'icon-error': errors.password_confirmation }"
+                                        @click="showPassword_confirmation = !showPassword_confirmation">
+                                        <svg class="icon" width="22" height="22" viewBox="0 0 22 22" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M1.05938 11.348C0.980208 11.1235 0.980208 10.8765 1.05938 10.652C1.83045 8.68365 3.13931 7.00069 4.82002 5.81644C6.50073 4.6322 8.47759 4 10.5 4C12.5224 4 14.4993 4.6322 16.18 5.81644C17.8607 7.00069 19.1695 8.68365 19.9406 10.652C20.0198 10.8765 20.0198 11.1235 19.9406 11.348C19.1695 13.3163 17.8607 14.9993 16.18 16.1836C14.4993 17.3678 12.5224 18 10.5 18C8.47759 18 6.50073 17.3678 4.82002 16.1836C3.13931 14.9993 1.83045 13.3163 1.05938 11.348Z"
+                                                stroke="currentColor" stroke-width="1.3" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+
+                                            <path
+                                                d="M10.5001 14.0005C12.0741 14.0005 13.35 12.6573 13.35 11.0003C13.35 9.34326 12.0741 8 10.5001 8C8.92619 8 7.65027 9.34326 7.65027 11.0003C7.65027 12.6573 8.92619 14.0005 10.5001 14.0005Z"
+                                                stroke="currentColor" stroke-width="1.3" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+
+                                            <line v-if="!showPassword_confirmation" x1="3" y1="3" x2="19" y2="19"
+                                                stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+                                        </svg>
+                                    </div>
+                                </div>
                                 <span v-if="errors.password_confirmation" class="error-message">{{
                                     errors.password_confirmation[0] }}</span>
                             </div>
@@ -89,9 +156,15 @@
                             </div>
                             <div class="form">
                                 <span>Upload Avatar</span>
-                                <div class="upload-ref" @click="triggerFileInput">
+                                <div class="upload-ref" :class="{ 'active-img': imageUrl }" @click="triggerFileInput">
                                     <div v-if="imageUrl" class="preview-container">
                                         <img :src="imageUrl" alt="Preview" class="preview-img" />
+                                        <div class="detail">
+                                            <span class="file-name">{{ fileName }}</span>
+                                            <span class="file-size">size - {{ fileSize }}</span>
+                                            <span class="file-change">Change</span>
+
+                                        </div>
                                     </div>
                                     <template v-else>
                                         <div class="icon">
@@ -135,7 +208,7 @@
                 </div>
                 <div class="login">
                     <span class="message">{{ ui.footer }}</span>
-                    <span class="redirect">{{ ui.link }}</span>
+                    <span @click="changeType" class="redirect">{{ ui.link }}</span>
                 </div>
 
                 <div class="modal-body">
@@ -152,12 +225,21 @@ const current_step = ref(1);
 const loading = ref(false);
 const complete_steps = ref<number[]>([]);
 const authStore = useAuthStore();
+const showPassword = ref(false);
+const showPassword_confirmation = ref(false);
 const props = defineProps<{
     modal: {
         isOpen: boolean;
         type: 'login' | 'register' | null;
     }
 }>();
+function changeType(){
+    if(props.modal.type === "login"){
+        props.modal.type = "register";
+    } else {
+        props.modal.type = "login";
+    }
+}
 
 const ui = computed(() => {
     const isLogin = props.modal.type === 'login';
@@ -265,6 +347,8 @@ const closeModal = () => {
 }
 const selectedFile = ref<File | null>(null);
 const imageUrl = ref<string | null>(null);
+const fileName = ref('');
+const fileSize = ref('');
 const fileInput = ref<HTMLInputElement | null>(null);
 
 const triggerFileInput = () => {
@@ -277,13 +361,54 @@ const handleFileChange = (event: Event) => {
     if (target.files && target.files[0]) {
         selectedFile.value = target.files[0];
 
+        fileName.value = target.files[0].name;
         imageUrl.value = URL.createObjectURL(target.files[0]);
+        const sizeInMB = (target.files[0].size / (1024 * 1024)).toFixed(2);
+        fileSize.value = `${sizeInMB} MB`;
     }
 };
 
 </script>
 
 <style scoped>
+.input-wrap {
+    position: relative;
+    width: 100%;
+}
+
+.icon-container {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.icon-container {
+    color: #8A8A8A;
+    transition: color 0.2s ease;
+}
+
+.icon-error {
+    color: #F4161A !important;
+}
+
+.input-wrap .error-input {
+    border-color: #F4161A;
+}
+
+.icon-container svg path {
+    transition: stroke 0.2s ease;
+}
+
+.icon-container:hover svg path {
+    stroke: #333;
+}
+
 .error-span {
     color: #F4161A;
 }
@@ -511,6 +636,7 @@ input {
 .login {
     display: flex;
     justify-content: center;
+    align-items: center;
     margin-top: 20px;
     gap: 8px;
 
@@ -522,6 +648,7 @@ input {
     font-weight: 500;
     font-size: 14px;
     text-decoration: underline;
+    cursor: pointer;
 }
 
 .login .message {
@@ -531,8 +658,12 @@ input {
     font-size: 12px;
 }
 
+.active-img {
+    background-color: #EEEDFC !important;
+}
+
 .upload-ref {
-    min-height: 200px;
+    height: 142px;
 
     cursor: pointer;
 
@@ -585,16 +716,40 @@ input {
 
 .preview-container {
     display: flex;
-    flex-direction: column;
     align-items: center;
     gap: 10px;
 }
 
 .preview-img {
-    max-width: 100%;
-    max-height: 250px;
-    border-radius: 8px;
+    max-width: 54px;
+    max-height: 54px;
+    border-radius: 40px;
     object-fit: cover;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.file-name {
+    font-size: 12px;
+    font-weight: 400;
+    color: #525252;
+}
+
+.file-size {
+    font-size: 10px;
+    font-weight: 400;
+    color: #ADADAD;
+}
+
+.file-change {
+    font-size: 10px;
+    font-weight: 500;
+    color: #4F46E5;
+    text-decoration: underline;
+}
+
+.detail {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 </style>
