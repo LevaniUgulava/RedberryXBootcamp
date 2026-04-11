@@ -37,8 +37,7 @@
                 <div class="profile-icon" v-if="authStore.isLoggedIn">
                     <div class="profile-icon" @click="triggerModal('profile')">
                         <div class="avatar-wrapper">
-                            <img v-if="authStore.user?.avatar" :src="authStore.user?.avatar" alt="Avatar"
-                                class="avatar-img">
+                            <img v-if="userAvatar" :src="userAvatar" alt="Avatar" class="avatar-img">
                             <svg v-else width="56" height="56" viewBox="0 0 56 56" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path class="bg-circle"
@@ -58,9 +57,8 @@
 
                             <svg class="status-icon" width="18" height="18" viewBox="0 0 18 18" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="9" cy="9" r="8"
-                                    :fill="authStore.user.profileComplete ? '#1DC31D' : '#F4A316'" stroke="white"
-                                    stroke-width="2" />
+                                <circle cx="9" cy="9" r="8" :fill="isProfileComplete ? '#1DC31D' : '#F4A316'"
+                                    stroke="white" stroke-width="2" />
                             </svg>
                         </div>
                     </div>
@@ -77,6 +75,11 @@
 import { useAuthStore } from '~/stores/auth';
 
 const authStore = useAuthStore();
+const user = computed(() => authStore.user);
+const isLogin = computed(() => authStore.isLoggedIn);
+const isProfileComplete = computed(() => user.value?.profileComplete ?? false);
+const userAvatar = computed(() => user.value?.avatar);
+
 const emit = defineEmits<{
     (e: 'openAuthModal', type: 'login' | 'register'): void;
     (e: 'openProfileModal'): void;
@@ -97,7 +100,11 @@ const triggerModal = (name: keyof typeof modalActions, type?: 'login' | 'registe
         (action as () => void)();
     }
 };
-
+onMounted(async () => {
+    if (authStore.token && !authStore.user) {
+        await authStore.me();
+    }
+});
 
 </script>
 <style scoped>

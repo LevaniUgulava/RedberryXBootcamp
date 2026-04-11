@@ -1,7 +1,8 @@
 
 export const useAuthStore = defineStore('auth', () => {
     const config = useRuntimeConfig();
-    const user = ref<any>(null)
+    const userCookie = useCookie<any>('user_data')
+    const user = ref(userCookie.value || null)
     const token = useCookie('auth_token', {
         maxAge: 60 * 60 * 24,
         sameSite: 'lax'
@@ -59,6 +60,7 @@ export const useAuthStore = defineStore('auth', () => {
                 }
             })
             user.value = response.data
+            userCookie.value = response.data
 
         } catch (error) {
             console.error('Fetch failed:', error)
