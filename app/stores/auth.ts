@@ -49,11 +49,52 @@ export const useAuthStore = defineStore('auth', () => {
             throw error
         }
     }
+    async function me() {
+        try {
+            const response = await $fetch<any>('/me', {
+                method: 'GET',
+                baseURL: config.public.api,
+                headers: {
+                    Authorization: `Bearer ${token.value}`
+                }
+            })
+            user.value = response.data
+
+        } catch (error) {
+            console.error('Fetch failed:', error)
+            throw error
+        }
+    }
+    async function updateProfile(credentials: any) {
+        try {
+
+
+            const response = await $fetch<any>('/profile', {
+                method: 'PUT',
+                baseURL: config.public.api,
+                headers: {
+                    Authorization: `Bearer ${token.value}`
+                },
+                body: credentials
+            });
+
+            if (response.data) {
+                user.value = response.data;
+            }
+
+            return response;
+        } catch (error: any) {
+            console.error('Profile update failed:', error);
+            throw error;
+        }
+    }
     return {
         user,
         isLoggedIn,
         login,
         register,
+        updateProfile,
+        me,
         token
     }
 
