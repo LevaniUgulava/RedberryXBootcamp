@@ -12,7 +12,7 @@
 
             <nav class="nav-section">
                 <div class="nav-links">
-                    <a href="#" class="nav-item">
+                    <a href="/courses" class="nav-item">
                         <span class="icon"><svg width="26" height="26" viewBox="0 0 26 26" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -21,7 +21,7 @@
                             </svg>
                         </span> Browse Courses
                     </a>
-                    <button @click="triggerModal('enrolled')" v-if="!isAuthenticated" class="nav-item">
+                    <button @click="triggerModal('enrolled')" v-if="authStore.isLoggedIn" class="nav-item">
                         <span class="icon"><svg width="26" height="26" viewBox="0 0 26 26" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -34,7 +34,7 @@
                     </button>
                 </div>
 
-                <div class="profile-icon" v-if="!isAuthenticated">
+                <div class="profile-icon" v-if="authStore.isLoggedIn">
                     <div class="profile-icon" @click="triggerModal('profile')">
                         <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path class="bg-circle"
@@ -52,7 +52,7 @@
                         </svg>
                     </div>
                 </div>
-                <div class="cta-buttons" v-if="isAuthenticated">
+                <div class="cta-buttons" v-if="!authStore.isLoggedIn">
                     <button @click="triggerModal('auth', 'login')" class="cta-button login">Login</button>
                     <button @click="triggerModal('auth', 'register')" class="cta-button signup">Sign Up</button>
                 </div>
@@ -61,7 +61,9 @@
     </header>
 </template>
 <script setup lang="ts">
-const isAuthenticated = ref(false);
+import { useAuthStore } from '~/stores/auth';
+
+const authStore = useAuthStore();
 const emit = defineEmits<{
     (e: 'openAuthModal', type: 'login' | 'register'): void;
     (e: 'openProfileModal'): void;
