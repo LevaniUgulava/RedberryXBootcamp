@@ -1,16 +1,17 @@
 <template>
     <div class="app-wrapper">
-        <header-component @open-auth-modal="toggleModal('auth', true)"
-            @open-profile-modal="toggleModal('profile', true)" @open-enrolled-modal="toggleModal('enrollment', true)" />
+        <header-component @open-auth-modal="(type) => toggleModal('auth', true, type)"
+            @open-profile-modal=" toggleModal('profile', true)"
+            @open-enrolled-modal="toggleModal('enrollment', true)" />
         <main class="content-canvas">
             <slot />
         </main>
         <footer-component />
+        <auth-modal v-if="modalState.auth.isOpen" :modal="modalState.auth" @close="toggleModal('auth', false)" />
+
     </div>
 </template>
 <script setup lang="ts">
-
-
 
 
 const modalState = reactive({
