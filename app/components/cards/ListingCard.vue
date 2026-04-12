@@ -55,7 +55,7 @@ const props = defineProps({
     }
 })
 const redirect = () => {
-    window.location.href = "/courses/" + props.item?.id;
+    window.location.href = "/course/" + props.item?.id;
 }
 
 </script>
