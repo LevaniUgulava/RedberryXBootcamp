@@ -2,9 +2,8 @@ import { defineStore } from "pinia";
 
 export const useAuthStore = defineStore('auth', () => {
     const config = useRuntimeConfig();
-    const userCookie = useCookie<any>('user_data')
-    const user = ref(userCookie.value || null)
-    const token = useCookie('auth_token', {
+    const user = useCookie<any>('user_data');
+    const token = useCookie<string | null>('auth_token', {
         maxAge: 60 * 60 * 24,
         sameSite: 'lax'
     });
@@ -60,9 +59,7 @@ export const useAuthStore = defineStore('auth', () => {
                     Authorization: `Bearer ${token.value}`
                 }
             })
-            user.value = response.data
-            userCookie.value = response.data
-
+            user.value = response.data;
         } catch (error) {
             console.error('Fetch failed:', error)
             throw error
