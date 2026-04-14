@@ -89,7 +89,7 @@
                                     </div>
                                 </div>
                                 <span class="error-message" v-if="errors.mobile_number">{{ errors.mobile_number?.[0]
-                                    }}</span>
+                                }}</span>
 
 
                             </div>
@@ -166,8 +166,9 @@
 import { useAuthStore } from '~/stores/auth';
 
 const authStore = useAuthStore();
-const { status } = await useAsyncData('me', () => authStore.me());
-
+const { status, refresh } = useAsyncData('me', () => authStore.me(), {
+    lazy: true
+});
 const loading = ref(false);
 
 const selectedFile = ref<File | null>(null);
