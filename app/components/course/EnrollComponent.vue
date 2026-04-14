@@ -137,8 +137,8 @@
                     </div>
                     <div v-for="(item, index) in sessionTypes" :key="index" class="session-first-div">
 
-                        <div @click="selectSessionType(item.id)" :class="{ 'active': steps.thirdStep.value == item.id }"
-                            class="card gap-5 h-131">
+                        <div @click="selectSessionType(item.id, item.courseScheduleId)"
+                            :class="{ 'active': steps.thirdStep.value == item.id }" class="card gap-5 h-131">
                             <div>
                                 <svg class="text-gray" width="26" height="26" viewBox="0 0 26 26" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -178,7 +178,7 @@
                 <span class="text-m text-gray-400">Session Type</span>
                 <span class="text-m text-gray-800"> + ${{ priceModifier }}</span>
             </div>
-            <button class="enroll" :class="{ 'disable': !activeButton }">
+            <button @click="handleEnroll" class="enroll" :class="{ 'disable': !activeButton }">
                 Enroll Now
             </button>
         </div>
@@ -191,9 +191,12 @@
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth';
 import NotifyComponent from '../auth/notifyComponent.vue';
+import { useCourseStore } from '~/stores/course';
+import { useModalStore } from '~/stores/modal';
 
 const authStore = useAuthStore();
-
+const courseStore = useCourseStore();
+const modalStore = useModalStore();
 const status = computed(() => {
     if (!authStore.isLoggedIn) return 'noAuth';
     if (!authStore.user?.profileComplete) return 'noComplete';
@@ -201,7 +204,7 @@ const status = computed(() => {
     return null;
 });
 const activeButton = computed(() => {
-    return steps.firstStep.value && steps.secondStep.value && steps.thirdStep.value && sessionTypes.value?.find((s: any) => s.id === steps.thirdStep.value)?.availableSeats > 0 && !status.value;
+    return steps.firstStep.value && steps.secondStep.value && steps.thirdStep.value && sessionTypes.value?.find((s: any) => s.id === steps.thirdStep.value)?.availableSeats > 0;
 })
 const props = defineProps<{
     courseId: string,
@@ -321,15 +324,27 @@ const handleSessiontype = async (timeslotid: number) => {
 
     }
 }
+const courseScheduleId = ref<number>();
 const priceModifier = computed(() => {
     const selectedSession = sessionTypes.value?.find((s: any) => s.id === steps.thirdStep.value);
     return selectedSession ? selectedSession.priceModifier : 0;
 })
-const selectSessionType = (id: number) => {
+const selectSessionType = (id: number, courseSchedule: number) => {
+    if (!courseSchedule || !id) return;
     steps.thirdStep.value = id;
+    courseScheduleId.value = courseSchedule;
     setStep(2, id);
 }
-
+const handleEnroll = () => {
+    if (authStore.user?.profileComplete === false) {
+        modalStore.openFeedback('profile');
+    }
+    if (props.courseId && courseScheduleId.value) {
+        courseStore.Enrollment(props.courseId, courseScheduleId.value);
+    } else {
+        console.warn("Missing Course ID or Schedule ID");
+    }
+}
 
 </script>
 <style scoped>

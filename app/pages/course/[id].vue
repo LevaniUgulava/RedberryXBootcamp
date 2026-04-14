@@ -102,17 +102,24 @@
             <article class="details">
                 <EnrollComponent v-if="course.enrollment === null" :course-id="courseId"
                     :basePrice="course.basePrice" />
-                <EnrolledComponent v-else :item="course.enrollment" />
+                <EnrolledComponent v-else :item="course.enrollment" :course-id="courseId" :course-name="course.title" />
             </article>
         </main>
+        <div>
+            <FeedbackModal v-if="modalStore.feedback.isOpen" :type="modalStore.feedback.type"
+                :course-name="modalStore.feedback.courseName" :time="modalStore.feedback.details" />
+        </div>
 
     </div>
 </template>
 <script setup lang="ts">
 import EnrollComponent from '~/components/course/EnrollComponent.vue';
 import EnrolledComponent from '~/components/course/EnrolledComponent.vue';
+import FeedbackModal from '~/components/feedbackModal.vue';
 import { useAuthStore } from '~/stores/auth';
+import { useModalStore } from '~/stores/modal';
 const authStore = useAuthStore();
+const modalStore = useModalStore();
 const config = useRuntimeConfig();
 const route = useRoute();
 const courseId = computed(() => route.params.id as string);

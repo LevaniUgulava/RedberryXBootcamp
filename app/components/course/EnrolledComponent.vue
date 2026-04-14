@@ -50,7 +50,7 @@
 
             </div>
             <div class="action">
-                <button class="btn">
+                <button @click="ui.isCompleted ? retakeCourse() : completeCourse()" class="btn">
                     {{ ui.btn.text }}
                     <div v-html="ui.btn.icon"></div>
 
@@ -62,26 +62,27 @@
     </div>
 </template>
 <script setup lang="ts">
+import { useAuthStore } from '~/stores/auth';
+import { useModalStore } from '~/stores/modal';
+
 
 const props = defineProps<{
+    courseId: string;
+    courseName: string;
     item: any
 }>();
 
 
-const isClosed = useCookie(`close-rate-1`, { default: () => false });
-//id dynamic
-const handleClose = () => {
-    localStorage.setItem(`close-rate-1`, 'true');
-    isClosed.value = true;
-};
+const authStore = useAuthStore();
+const modalStore = useModalStore();
+const config = useRuntimeConfig();
 
-const status = ref<string>('completed');
 const ui = computed(() => {
-    const isEnrolled = status.value === "enrolled";
+    const isCompleted = props.item.progress == 100;
     return {
-        isCompleted: !isEnrolled,
-        status: props.item.progress !== 100 ? "Enrolled" : "Completed",
-        btn: props.item.progress !== 100 ? {
+        isCompleted,
+        status: !isCompleted ? "Enrolled" : "Completed",
+        btn: !isCompleted ? {
             'text': 'Complete Course', 'icon': ` <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M21.5784 6.30087L8.63266 19.7856C8.55752 19.8639 8.46828 19.9261 8.37006 19.9685C8.27184 20.0109 8.16655 20.0328 8.06022 20.0328C7.95389 20.0328 7.8486 20.0109 7.75038 19.9685C7.65216 19.9261 7.56292 19.8639 7.48778 19.7856L1.82403 13.886C1.67221 13.7279 1.58691 13.5134 1.58691 13.2897C1.58691 13.0661 1.67221 12.8516 1.82403 12.6935C1.97585 12.5353 2.18176 12.4465 2.39647 12.4465C2.61118 12.4465 2.81709 12.5353 2.96891 12.6935L8.06022 17.9978L20.4335 5.10831C20.5853 4.95017 20.7912 4.86133 21.0059 4.86133C21.2206 4.86133 21.4266 4.95017 21.5784 5.10831C21.7302 5.26646 21.8155 5.48094 21.8155 5.70459C21.8155 5.92824 21.7302 6.14273 21.5784 6.30087Z"
@@ -93,6 +94,39 @@ const ui = computed(() => {
 `}
     };
 })
+const completeCourse = async () => {
+    try {
+        const res = await $fetch(`/enrollments/${props.item.id}/complete`, {
+            baseURL: config.public.api as string,
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authStore.token}`,
+            },
+        });
+        await refreshNuxtData(`course-${props.courseId}`);
+        modalStore.openFeedback('congratulations', props.courseName);
+    } catch (err) {
+        console.log(err);
+    }
+}
+const retakeCourse = async () => {
+    try {
+        const res = await $fetch(`/enrollments/${props.item.id}`, {
+            baseURL: config.public.api as string,
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authStore.token}`,
+            },
+        });
+        await refreshNuxtData(`course-${props.courseId}`);
+
+
+    } catch (err) {
+        console.log(err);
+    }
+}
 </script>
 <style scoped>
 .enrolled-course-detail {
