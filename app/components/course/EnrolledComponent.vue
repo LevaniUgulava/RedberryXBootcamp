@@ -1,7 +1,7 @@
 <template>
     <div class="enrolled-course-detail">
         <div class="info">
-            <div :class="['status', props.item.progress !== 100 ? 'enrolled' : 'completed']">
+            <div :class="['status', props.item.enrollment.progress !== 100 ? 'enrolled' : 'completed']">
                 {{ ui.status }}
             </div>
             <div class="body-l">
@@ -11,7 +11,7 @@
                         fill="#525252" />
                 </svg>
 
-                <span>{{ props.item.schedule?.weeklySchedule.label }}</span>
+                <span>{{ props.item.enrollment.schedule?.weeklySchedule.label }}</span>
             </div>
             <div class="body-l">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,7 +20,7 @@
                         fill="#525252" />
                 </svg>
 
-                <span>{{ props.item.schedule?.timeSlot.label }}</span>
+                <span>{{ props.item.enrollment.schedule?.timeSlot.label }}</span>
             </div>
             <div class="body-l">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -28,23 +28,23 @@
                         d="M4.5 4.25H19.5C19.9641 4.25 20.4091 4.43451 20.7373 4.7627C21.0655 5.09088 21.25 5.53587 21.25 6V16.5C21.25 16.9641 21.0655 17.4091 20.7373 17.7373C20.4091 18.0655 19.9641 18.25 19.5 18.25H12.25V20.75H15C15.0663 20.75 15.1299 20.7764 15.1768 20.8232C15.2236 20.8701 15.25 20.9337 15.25 21C15.25 21.0663 15.2236 21.1299 15.1768 21.1768C15.1299 21.2236 15.0663 21.25 15 21.25H9C8.9337 21.25 8.87013 21.2236 8.82324 21.1768C8.77636 21.1299 8.75 21.0663 8.75 21C8.75 20.9337 8.77636 20.8701 8.82324 20.8232C8.87013 20.7764 8.9337 20.75 9 20.75H11.75V18.25H4.5C4.03587 18.25 3.59088 18.0655 3.2627 17.7373C2.93451 17.4091 2.75 16.9641 2.75 16.5V6C2.75 5.53587 2.93451 5.09088 3.2627 4.7627C3.59088 4.43451 4.03587 4.25 4.5 4.25ZM3.25 16.5C3.25 16.8315 3.38179 17.1494 3.61621 17.3838C3.85063 17.6182 4.16848 17.75 4.5 17.75H19.5C19.8315 17.75 20.1494 17.6182 20.3838 17.3838C20.6182 17.1494 20.75 16.8315 20.75 16.5V14.5H3.25V16.5ZM4.5 4.75C4.16848 4.75 3.85063 4.88179 3.61621 5.11621C3.38179 5.35063 3.25 5.66848 3.25 6V14H20.75V6C20.75 5.66848 20.6182 5.35063 20.3838 5.11621C20.1494 4.88179 19.8315 4.75 19.5 4.75H4.5Z"
                         fill="#292929" stroke="#0A0A0A" />
                 </svg>
-                <span>{{ props.item.schedule?.sessionType.name }}</span>
+                <span>{{ props.item.enrollment.schedule?.sessionType.name }}</span>
             </div>
-            <div class="body-l"><svg v-if="props.item.schedule?.location" width="24" height="24" viewBox="0 0 24 24"
-                    fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div class="body-l"><svg v-if="props.item.enrollment.schedule?.location" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M12 6C11.2583 6 10.5333 6.21993 9.91661 6.63199C9.29993 7.04404 8.81928 7.62971 8.53545 8.31494C8.25162 9.00016 8.17736 9.75416 8.32205 10.4816C8.46675 11.209 8.8239 11.8772 9.34835 12.4017C9.8728 12.9261 10.541 13.2833 11.2684 13.4279C11.9958 13.5726 12.7498 13.4984 13.4351 13.2145C14.1203 12.9307 14.706 12.4501 15.118 11.8334C15.5301 11.2167 15.75 10.4917 15.75 9.75C15.75 8.75544 15.3549 7.80161 14.6517 7.09835C13.9484 6.39509 12.9946 6 12 6ZM12 12C11.555 12 11.12 11.868 10.75 11.6208C10.38 11.3736 10.0916 11.0222 9.92127 10.611C9.75097 10.1999 9.70642 9.7475 9.79323 9.31105C9.88005 8.87459 10.0943 8.47368 10.409 8.15901C10.7237 7.84434 11.1246 7.63005 11.561 7.54323C11.9975 7.45642 12.4499 7.50097 12.861 7.67127C13.2722 7.84157 13.6236 8.12996 13.8708 8.49997C14.118 8.86998 14.25 9.30499 14.25 9.75C14.25 10.3467 14.0129 10.919 13.591 11.341C13.169 11.7629 12.5967 12 12 12ZM12 1.5C9.81273 1.50248 7.71575 2.37247 6.16911 3.91911C4.62247 5.46575 3.75248 7.56273 3.75 9.75C3.75 12.6938 5.11031 15.8138 7.6875 18.7734C8.84552 20.1108 10.1489 21.3151 11.5734 22.3641C11.6995 22.4524 11.8498 22.4998 12.0037 22.4998C12.1577 22.4998 12.308 22.4524 12.4341 22.3641C13.856 21.3147 15.1568 20.1104 16.3125 18.7734C18.8859 15.8138 20.25 12.6938 20.25 9.75C20.2475 7.56273 19.3775 5.46575 17.8309 3.91911C16.2843 2.37247 14.1873 1.50248 12 1.5ZM12 20.8125C10.4503 19.5938 5.25 15.1172 5.25 9.75C5.25 7.95979 5.96116 6.2429 7.22703 4.97703C8.4929 3.71116 10.2098 3 12 3C13.7902 3 15.5071 3.71116 16.773 4.97703C18.0388 6.2429 18.75 7.95979 18.75 9.75C18.75 15.1153 13.5497 19.5938 12 20.8125Z"
                         fill="#525252" />
                 </svg>
-                <span>{{ props.item.schedule?.location }}</span>
+                <span>{{ props.item.enrollment.schedule?.location }}</span>
             </div>
         </div>
         <div class="progress-button">
             <div class="progress">
-                <div class="text">{{ props.item.progress }}% Complete</div>
+                <div class="text">{{ props.item.enrollment.progress }}% Complete</div>
                 <div class="progress-bar">
                     <div
-                        :style="`width: ${props.item.progress}%; background-color: #4F46E5; height: 23px; border-radius: 30px;`">
+                        :style="`width: ${props.item.enrollment.progress}%; background-color: #4F46E5; height: 23px; border-radius: 30px;`">
                     </div>
                 </div>
 
@@ -56,29 +56,35 @@
 
                 </button>
             </div>
+        </div>
+        <div v-if="ui.isCompleted && !isClosed" class="rate">
+            <RateComponent :isRated="props.item.isRated" :rating="courseReview" :courseId="props.item.id"
+                @onClose="handleClose" />
 
         </div>
-
     </div>
 </template>
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth';
 import { useModalStore } from '~/stores/modal';
+import RateComponent from '../rateComponent.vue';
 
 
 const props = defineProps<{
-    courseId: string;
-    courseName: string;
     item: any
 }>();
 
+const isClosed = ref(false);
+const handleClose = () => {
+    isClosed.value = true;
+};
 
 const authStore = useAuthStore();
 const modalStore = useModalStore();
 const config = useRuntimeConfig();
 
 const ui = computed(() => {
-    const isCompleted = props.item.progress == 100;
+    const isCompleted = props.item.enrollment.progress == 100;
     return {
         isCompleted,
         status: !isCompleted ? "Enrolled" : "Completed",
@@ -94,9 +100,16 @@ const ui = computed(() => {
 `}
     };
 })
+const courseReview = computed(() => {
+    if (!props.item?.reviews) return 0;
+
+    const review = props.item.reviews.find((review: any) => review.userId === authStore.user?.id);
+
+    return review?.rating || 0;
+})
 const completeCourse = async () => {
     try {
-        const res = await $fetch(`/enrollments/${props.item.id}/complete`, {
+        const res = await $fetch(`/enrollments/${props.item.enrollment.id}/complete`, {
             baseURL: config.public.api as string,
             method: 'PATCH',
             headers: {
@@ -104,15 +117,15 @@ const completeCourse = async () => {
                 'Authorization': `Bearer ${authStore.token}`,
             },
         });
-        await refreshNuxtData(`course-${props.courseId}`);
-        modalStore.openFeedback('congratulations', props.courseName);
+        await refreshNuxtData(`course-${props.item.id}`);
+        modalStore.openFeedback('congratulations', props.item.title);
     } catch (err) {
         console.log(err);
     }
 }
 const retakeCourse = async () => {
     try {
-        const res = await $fetch(`/enrollments/${props.item.id}`, {
+        const res = await $fetch(`/enrollments/${props.item.enrollment.id}`, {
             baseURL: config.public.api as string,
             method: 'DELETE',
             headers: {
@@ -120,7 +133,7 @@ const retakeCourse = async () => {
                 'Authorization': `Bearer ${authStore.token}`,
             },
         });
-        await refreshNuxtData(`course-${props.courseId}`);
+        await refreshNuxtData(`course-${props.item.id}`);
 
 
     } catch (err) {

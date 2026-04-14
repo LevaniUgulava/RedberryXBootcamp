@@ -102,12 +102,13 @@
             <article class="details">
                 <EnrollComponent v-if="course.enrollment === null" :course-id="courseId"
                     :basePrice="course.basePrice" />
-                <EnrolledComponent v-else :item="course.enrollment" :course-id="courseId" :course-name="course.title" />
+                <EnrolledComponent v-else :item="course" />
             </article>
         </main>
         <div>
             <FeedbackModal v-if="modalStore.feedback.isOpen" :type="modalStore.feedback.type"
-                :course-name="modalStore.feedback.courseName" :time="modalStore.feedback.details" />
+                :course-name="modalStore.feedback.courseName" :time="modalStore.feedback.details"
+                :item="course.reviews" />
         </div>
 
     </div>

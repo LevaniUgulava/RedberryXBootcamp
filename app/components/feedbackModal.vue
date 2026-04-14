@@ -13,6 +13,10 @@
                         <div class="text" v-html="ui.text"></div>
                     </div>
                 </div>
+                <div>
+                    <RateComponent v-if="ui.rating" :courseId="courseStore.lastAttempt?.courseId || ''" :isRated="isRated"
+                        :icon-shown="true" :rating="courseReview" />
+                </div>
                 <div class="buttons">
                     <button @click="handleLightClick" v-if="ui.btn2" class="btn light">
                         {{ ui.btn2 }}
@@ -28,13 +32,14 @@
 </template>
 <script setup lang="ts">
 import { computed } from 'vue';
+import { useAuthStore } from '~/stores/auth';
 import { useCourseStore } from '~/stores/course';
 import { useModalStore } from '~/stores/modal';
-
+const authStore = useAuthStore();
 const modalStore = useModalStore();
 const courseStore = useCourseStore();
 const props = defineProps<{
-
+    item?: any;
     type: 'profile' | 'congratulations' | 'conflict' | 'confirm';
     courseName?: string;
     time?: string;
@@ -53,6 +58,15 @@ const handleLightClick = () => {
         }
     }
 }
+const courseReview = computed(() => {
+    if (!props.item) return 0;
+
+    const review = props.item.find((review: any) => review.userId === authStore.user?.id);
+
+    return review?.rating || 0;
+})
+const isRated = ref(courseReview.value > 0);
+
 const handleDarkClick = () => {
     modalStore.closeFeedback();
 }
