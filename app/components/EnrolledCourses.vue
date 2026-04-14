@@ -74,6 +74,7 @@ const closeModal = () => {
 
 const { data: enrollments, pending } = await useFetch('/courses/in-progress', {
     baseURL: config.public.api as string,
+    key: 'user-enrollments',
     lazy: true,
     headers: {
         Authorization: `Bearer ${authStore.token}`,

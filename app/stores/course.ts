@@ -24,6 +24,7 @@ export const useCourseStore = defineStore('course', () => {
             });
             modalStore.openFeedback('confirm', response.data.course.title);
             await refreshNuxtData(`course-${courseId}`);
+            await refreshNuxtData('user-enrollments');
 
 
         } catch (err: any) {
@@ -42,7 +43,28 @@ export const useCourseStore = defineStore('course', () => {
             console.error('Enrollment error:', err);
         }
     }
+
+    const rate = async (rating: number, courseId: string) => {
+        try {
+            const response = await $fetch(`/courses/${courseId}/reviews`, {
+                baseURL: config.public.api,
+                method: 'POST',
+                body: {
+                    rating: rating
+                },
+                headers: {
+                    Authorization: `Bearer ${authStore.token}`,
+                }
+            })
+
+        } catch (err) {
+            console.error('Error submitting rating:', err);
+        }
+
+    }
+
     return {
+        rate,
         Enrollment, lastAttempt
     }
 
