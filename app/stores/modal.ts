@@ -15,7 +15,26 @@ export const useModalStore = defineStore('modal', () => {
         }
     };
 
+    const feedback = reactive({
+        isOpen: false,
+        type: 'confirm' as 'confirm' | 'profile' | 'conflict' | 'congratulations',
+        courseName: '',
+        details: ''
+    });
+    const openFeedback = (type: typeof feedback.type, courseName = '', time = '') => {
+        feedback.type = type;
+        feedback.courseName = courseName;
+        feedback.isOpen = true;
+        feedback.details = time
+    };
+    const closeFeedback = () => {
+        feedback.isOpen = false;
+    };
+
     return {
+        feedback,
+        openFeedback,
+        closeFeedback,
         modalState,
         toggleModal
     }
