@@ -42,20 +42,27 @@ const { data, error } = await useFetch<any>('/courses/featured', {
 if (error.value) {
     console.error('შეცდომა:', error.value);
 }
-const { data: inProgressCourses } = await useFetch('/courses/in-progress', {
-    baseURL: config.public.api as string,
-    key: "in-progress-index",
-    headers: computed(() => ({
-        Authorization: authStore.token ? `Bearer ${authStore.token}` : '',
-        Accept: 'application/json'
-    })),
-    watch: [() => authStore.token],
-    immediate: authStore.isLoggedIn,
-    transform: (res: any) => {
-        return res.data || res;
+const { data: inProgressCourses, refresh } = await useAsyncData(
+    'in-progress-index',
+    () => $fetch('/courses/in-progress', {
+        baseURL: config.public.api as string,
+        headers: {
+            Authorization: `Bearer ${authStore.token}`,
+            Accept: 'application/json'
+        }
+    }),
+    {
+        watch: [() => authStore.token],
+        immediate: authStore.isLoggedIn,
+        transform: (res: any) => res.data || res
+    }
+);
+
+watch(() => authStore.isLoggedIn, (isLoggedIn) => {
+    if (isLoggedIn) {
+        refresh();
     }
 });
-
 const dummyData = [
     {
         course: {
