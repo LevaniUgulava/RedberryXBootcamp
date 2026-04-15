@@ -121,8 +121,8 @@
                                     Password*</span>
                                 <div class="input-wrap">
                                     <input :class="{ 'error-input': errors.password_confirmation }"
-                                        :type="showPassword_confirmation ? 'text' : 'password'" v-model="form.password_confirmation"
-                                        placeholder="Confirm Password">
+                                        :type="showPassword_confirmation ? 'text' : 'password'"
+                                        v-model="form.password_confirmation" placeholder="Confirm Password">
                                     <div class="icon-container" :class="{ 'icon-error': errors.password_confirmation }"
                                         @click="showPassword_confirmation = !showPassword_confirmation">
                                         <svg class="icon" width="22" height="22" viewBox="0 0 22 22" fill="none"
@@ -233,8 +233,8 @@ const props = defineProps<{
         type: 'login' | 'register' | null;
     }
 }>();
-function changeType(){
-    if(props.modal.type === "login"){
+function changeType() {
+    if (props.modal.type === "login") {
         props.modal.type = "register";
     } else {
         props.modal.type = "login";
@@ -271,6 +271,8 @@ const next = () => {
         if (!form.password) errors.value.password = ['Password is required'];
         else if (form.password !== form.password_confirmation) {
             errors.value.password = ['Passwords do not match'];
+            errors.value.password_confirmation = ['Passwords do not match'];
+
         } else if (!form.password_confirmation) errors.value.password_confirmation = ['Password confirmation is required'];
     }
 
@@ -329,8 +331,25 @@ const handleSignUp = async () => {
             username: form.username,
             avatar: form.avatar
         });
-    } catch (error) {
-        console.error("რეგისტრაციის შეცდომა:", error);
+    } catch (error: any) {
+        const apiErrors = error.data?.errors;
+        if (apiErrors) {
+            errors.value = apiErrors
+
+            if (apiErrors.email?.[0]) {
+                current_step.value = 1;
+            }
+            if (apiErrors.password?.[0]) {
+                current_step.value = 2;
+            }
+            if (apiErrors.username?.[0]) {
+                current_step.value = 3;
+
+            }
+
+        } else {
+            console.error("ზოგადი შეცდომა:", error.data?.message || "Something went wrong");
+        }
     } finally {
         loading.value = false;
     }
