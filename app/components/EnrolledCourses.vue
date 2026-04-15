@@ -92,7 +92,6 @@ const { data: enrollments, pending } = await useFetch('/courses/in-progress', {
         }));
     }
 });
-console.log('Enrollments data:', enrollments.value);
 const totalEnrollments = computed(() => enrollments.value?.length || 0);
 
 </script>

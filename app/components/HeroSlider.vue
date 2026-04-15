@@ -13,7 +13,7 @@
                 <div class="content">
                     <h1>{{ slide.title }}</h1>
                     <p>{{ slide.description }}</p>
-                    <button class="btn">{{ slide.buttonText }}</button>
+                    <button @click="goToCourse" class="btn">{{ slide.buttonText }}</button>
                 </div>
             </swiper-slide>
 
@@ -51,7 +51,7 @@ import 'swiper/css/navigation';
 const SwiperAutoplay = Autoplay;
 const SwiperPagination = Pagination;
 const SwiperNavigation = Navigation;
-
+const router = useRouter();
 const swiperData = [
     {
         title: 'Start learning something new today',
@@ -72,6 +72,13 @@ const swiperData = [
         image: '/img/dfc2fadfbba911a1a07ab99c2358a787702a63cc.png'
     }
 ];
+
+const goToCourse = async () => {
+    await nextTick();
+    router.push('/courses').catch(err => {
+        console.error("Navigation error:", err);
+    });
+};
 </script>
 
 <style scoped>

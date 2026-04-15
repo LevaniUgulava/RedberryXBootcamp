@@ -45,6 +45,7 @@ export const useAuthStore = defineStore('auth', () => {
             })
             user.value = response.data.user
             token.value = response.data.token
+            await refreshNuxtData('in-progress-index');
         } catch (error) {
             console.error('Login failed:', error)
             throw error

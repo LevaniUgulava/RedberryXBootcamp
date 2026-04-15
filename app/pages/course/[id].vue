@@ -98,17 +98,21 @@
                     </div>
                 </div>
             </article>
-            <!-- here -->
             <article class="details">
-                <EnrollComponent v-if="course.enrollment === null" :course-id="courseId"
-                    :basePrice="course.basePrice" />
-                <EnrolledComponent v-else :item="course" />
+                <Transition name="fade" mode="out-in">
+                    <EnrollComponent v-if="course.enrollment === null" :key="'enroll'" :course-id="courseId"
+                        :basePrice="course.basePrice" />
+                    <EnrolledComponent v-else :key="'enrolled'" :item="course" />
+                </Transition>
             </article>
         </main>
         <div>
-            <FeedbackModal v-if="modalStore.feedback.isOpen" :type="modalStore.feedback.type"
-                :course-name="modalStore.feedback.courseName" :time="modalStore.feedback.details"
-                :item="course.reviews" />
+            <Transition name="modal-fade">
+                <FeedbackModal v-if="modalStore.feedback.isOpen" :type="modalStore.feedback.type"
+                    :course-name="modalStore.feedback.courseName" :time="modalStore.feedback.details"
+                    :item="course.reviews" />
+            </Transition>
+
         </div>
 
     </div>
@@ -147,6 +151,27 @@ const averageRating = computed(() => {
 </script>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.1s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+    transition: all 0.3s ease-out;
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+}
+
 .details {
     display: flex;
     flex-direction: column;

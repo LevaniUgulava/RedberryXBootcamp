@@ -5,7 +5,7 @@
                 <h2>{{ title }}</h2>
                 <p v-if="subtitle">{{ subtitle }}</p>
             </div>
-            <NuxtLink v-if="showSeeAll" to="/all" class="see-all">See All</NuxtLink>
+            <button v-if="count >= 4 || isFeatured" @click="openEnrolled" class="see-all">See All</button>
         </div>
 
         <div class="cards-grid">
@@ -17,13 +17,36 @@
 
 <script setup lang="ts">
 import Lockmodal from '~/components/auth/lockModal.vue';
-
-defineProps({
+import { useAuthStore } from '~/stores/auth';
+import { useModalStore } from '~/stores/modal';
+const modalStore = useModalStore();
+const authStore = useAuthStore();
+const router = useRouter();
+const props = defineProps({
     title: String,
     subtitle: String,
-    showSeeAll: Boolean,
-    modal: Boolean
+    modal: Boolean,
+    isFeatured: Boolean,
+    count: {
+        type: Number,
+        required: false,
+        default: 0
+    }
 });
+const openEnrolled = () => {
+    if (props.isFeatured) {
+        router.push('/courses');
+        return;
+    }
+    if (!authStore.isLoggedIn) {
+        modalStore.toggleModal('auth', true, 'login')
+
+    } else {
+        modalStore.toggleModal('enrollment', true)
+
+    }
+
+}
 </script>
 
 <style scoped>
@@ -76,5 +99,9 @@ defineProps({
     font-size: 20px;
     font-weight: 500;
     color: #4F46E5;
+    background-color: transparent;
+    border: none;
+    text-decoration: underline;
+    cursor: pointer;
 }
 </style>

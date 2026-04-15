@@ -16,11 +16,19 @@
                 <p class="lock-text">Sign in to track your learning progress</p>
             </div>
             <div class="button-wrapper">
-                <button class="cta-button">Log In</button>
+                <button @click="openModal" class="cta-button">Log In</button>
             </div>
         </div>
     </div>
 </template>
+<script setup lang="ts">
+import { useModalStore } from '~/stores/modal';
+
+const modalStore = useModalStore();
+const openModal = () => {
+    modalStore.toggleModal('auth', true, 'login')
+}
+</script>
 
 <style scoped>
 .lock-container {

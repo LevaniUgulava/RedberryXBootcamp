@@ -1,7 +1,7 @@
 <template>
     <header class="header-container">
         <div class="header-content">
-            <div class="logo">
+            <div @click.stop.prevent="goToHome" class="logo">
                 <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect width="60" height="60" rx="14" fill="#4F46E5" />
                     <path
@@ -76,10 +76,16 @@ import { useAuthStore } from '~/stores/auth';
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.user);
+const router = useRouter();
 const isLogin = computed(() => authStore.isLoggedIn);
 const isProfileComplete = computed(() => user.value?.profileComplete ?? false);
 const userAvatar = computed(() => user.value?.avatar);
-
+const goToHome = async () => {
+    await nextTick();
+    router.push('/').catch(err => {
+        console.error("Navigation error:", err);
+    });
+};
 const emit = defineEmits<{
     (e: 'openAuthModal', type: 'login' | 'register'): void;
     (e: 'openProfileModal'): void;
@@ -124,6 +130,10 @@ onMounted(async () => {
     justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
+}
+
+.logo {
+    cursor: pointer;
 }
 
 .nav-section {

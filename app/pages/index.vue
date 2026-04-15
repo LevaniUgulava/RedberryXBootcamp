@@ -3,20 +3,21 @@
         <HeroSlider />
 
         <!--authorized -->
-        <CourseSection v-if="authStore.isLoggedIn" title="Continue Learning" subtitle="Pick up where you left"
-            :showSeeAll="true">
+        <CourseSection v-if="authStore.isLoggedIn && inProgressCourses?.length > 0" :is-featured="false"
+            :count="inProgressCourses?.length || 0" title="Continue Learning" subtitle="Pick up where you left">
             <InProgressCard v-for="(item, index) in inProgressCourses" :item="item" :key="index" />
         </CourseSection>
 
         <CourseSection title="Start Learning Today"
-            subtitle="Choose from our most popular courses and begin your journey" :showSeeAll="false">
+            subtitle="Choose from our most popular courses and begin your journey" :showSeeAll="false"
+            :is-featured="true">
             <CardComponent v-for="item in data?.data" :key="item.id" :item="item" />
         </CourseSection>
 
 
         <!-- not-authorized -->
         <CourseSection v-if="!authStore.isLoggedIn" title="Continue Learning" subtitle="Pick up where you left"
-            :showSeeAll="true" :modal="true">
+            :modal="true">
             <InProgressCard v-for="(item, index) in dummyData" :item="item" :key="index" :is-blur="true" />
         </CourseSection>
 
@@ -36,19 +37,20 @@ const { data, error } = await useFetch<any>('/courses/featured', {
     baseURL: config.public.api as string
 });
 
-if (data.value) {
-    console.log('მონაცემები წამოვიდა:', data.value);
-}
+
 
 if (error.value) {
     console.error('შეცდომა:', error.value);
 }
 const { data: inProgressCourses } = await useFetch('/courses/in-progress', {
     baseURL: config.public.api as string,
-    headers: {
-        Authorization: `Bearer ${authStore.token}`,
+    key: "in-progress-index",
+    headers: computed(() => ({
+        Authorization: authStore.token ? `Bearer ${authStore.token}` : '',
         Accept: 'application/json'
-    },
+    })),
+    watch: [() => authStore.token],
+    immediate: authStore.isLoggedIn,
     transform: (res: any) => {
         return res.data || res;
     }

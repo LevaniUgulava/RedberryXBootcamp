@@ -46,7 +46,7 @@ const props = defineProps({
     item: Object
 });
 const redirect = () => {
-    window.location.href = "/details";
+    window.location.href = "/course/" + props.item?.course.id;
 }
 </script>
 <style scoped>
@@ -83,6 +83,7 @@ const redirect = () => {
     align-items: center;
     flex-direction: column;
     gap: 10px;
+    width: 100%;
 }
 
 .img-container {
@@ -101,6 +102,9 @@ const redirect = () => {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+}
+.card-name{
     width: 100%;
 }
 
