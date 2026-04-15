@@ -52,8 +52,6 @@
                         </svg>
                         {{ item.schedule.location }}
                     </div>
-                    <div v-else class="info">
-                    </div>
                     <div class="info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                             viewBox="0 0 640 640">
                             <path fill="none"
@@ -61,6 +59,8 @@
                                 stroke-width="25" stroke="#525252" />
                         </svg>
                         {{ props.item.totalPrice }}</div>
+                    <div v-if="!item.schedule.location" class="info">
+                    </div>
                 </div>
             </div>
 
@@ -225,6 +225,12 @@ h4 {
     font-size: 16px;
     font-weight: 500;
     font-family: 'inter', sans-serif;
+    cursor: pointer;
+    transition: ease-in-out 300ms;
+}
+
+.cta-button:hover {
+    background-color: #a29df117;
 }
 
 .card-detail {

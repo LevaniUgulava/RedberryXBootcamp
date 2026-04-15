@@ -104,7 +104,8 @@ const redirect = () => {
     align-items: center;
     width: 100%;
 }
-.card-name{
+
+.card-name {
     width: 100%;
 }
 
@@ -188,5 +189,12 @@ h4 {
     font-weight: 500;
     font-family: 'inter', sans-serif;
     cursor: pointer;
+    transition: ease-in-out 300ms;
+
+}
+
+
+.cta-button:hover {
+    background-color: #a29df117;
 }
 </style>
