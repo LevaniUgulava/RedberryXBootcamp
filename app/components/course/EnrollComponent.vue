@@ -19,24 +19,27 @@
                     </div>
 
 
-                    <svg :class="{ 'rotate-180': steps.firstStep.open }" class="arrow-icon" width="28" height="28"
+                    <svg @click="steps.firstStep.open = !steps.firstStep.open"
+                        :class="{ 'rotate-180': steps.firstStep.open }" class="arrow-icon" width="28" height="28"
                         viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M20.9359 17.2397C21.0081 17.3017 21.093 17.3501 21.1858 17.3823C21.2786 17.4145 21.3774 17.4297 21.4767 17.4271C21.5759 17.4246 21.6737 17.4043 21.7643 17.3674C21.8549 17.3305 21.9367 17.2778 22.0049 17.2122C22.0731 17.1466 22.1264 17.0694 22.1618 16.9851C22.1972 16.9008 22.2139 16.811 22.2111 16.7208C22.2083 16.6305 22.186 16.5417 22.1454 16.4594C22.1048 16.377 22.0468 16.3027 21.9746 16.2407L15.171 10.4007C15.0307 10.2801 14.8449 10.2129 14.6517 10.2129C14.4586 10.2129 14.2727 10.2801 14.1324 10.4007L7.32804 16.2407C7.25429 16.3023 7.19473 16.3766 7.15283 16.4592C7.11093 16.5419 7.08753 16.6313 7.08397 16.7223C7.08042 16.8132 7.09678 16.9039 7.13212 16.9891C7.16746 17.0743 7.22106 17.1522 7.28982 17.2184C7.35858 17.2846 7.44111 17.3377 7.53264 17.3746C7.62417 17.4115 7.72286 17.4316 7.82299 17.4336C7.92311 17.4356 8.02267 17.4194 8.11588 17.3861C8.20909 17.3529 8.2941 17.3031 8.36596 17.2397L14.6517 11.8449L20.9359 17.2397Z"
                             :fill="steps.firstStep.open ? '#130E67' : '#8A8A8A'" />
                     </svg>
                 </header>
-                <div v-if="steps.firstStep.open" class="week">
-                    <div v-for="item in allSchedules" :key="item.id" @click="handleScheduleSelection(item.id)"
-                        class="card gap-5 h-91" :class="{
-                            'disable': !isAvailable(item.id),
-                            'active': steps.firstStep.value == item.id,
-                        }">
-                        {{ item.label }}
+                <Transition name="fade">
+
+                    <div v-if="steps.firstStep.open" class="week">
+                        <div v-for="item in allSchedules" :key="item.id" @click="handleScheduleSelection(item.id)"
+                            class="card gap-5 h-91" :class="{
+                                'disable': !isAvailable(item.id),
+                                'active': steps.firstStep.value == item.id,
+                            }">
+                            {{ item.label }}
+                        </div>
+
                     </div>
-
-                </div>
-
+                </Transition>
             </div>
             <div class="step">
                 <header>
@@ -58,37 +61,39 @@
                         <h4 :class="{ 'text-gray-400': !steps.secondStep.open && !steps.secondStep.value }">Time
                             Slot</h4>
                     </div>
-                    <svg :class="{ 'rotate-180': steps.secondStep.open }" class="arrow-icon" width="28" height="28"
-                        viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg @click="toggle(1)" :class="{ 'rotate-180': steps.secondStep.open }" class="arrow-icon"
+                        width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M20.9359 17.2397C21.0081 17.3017 21.093 17.3501 21.1858 17.3823C21.2786 17.4145 21.3774 17.4297 21.4767 17.4271C21.5759 17.4246 21.6737 17.4043 21.7643 17.3674C21.8549 17.3305 21.9367 17.2778 22.0049 17.2122C22.0731 17.1466 22.1264 17.0694 22.1618 16.9851C22.1972 16.9008 22.2139 16.811 22.2111 16.7208C22.2083 16.6305 22.186 16.5417 22.1454 16.4594C22.1048 16.377 22.0468 16.3027 21.9746 16.2407L15.171 10.4007C15.0307 10.2801 14.8449 10.2129 14.6517 10.2129C14.4586 10.2129 14.2727 10.2801 14.1324 10.4007L7.32804 16.2407C7.25429 16.3023 7.19473 16.3766 7.15283 16.4592C7.11093 16.5419 7.08753 16.6313 7.08397 16.7223C7.08042 16.8132 7.09678 16.9039 7.13212 16.9891C7.16746 17.0743 7.22106 17.1522 7.28982 17.2184C7.35858 17.2846 7.44111 17.3377 7.53264 17.3746C7.62417 17.4115 7.72286 17.4316 7.82299 17.4336C7.92311 17.4356 8.02267 17.4194 8.11588 17.3861C8.20909 17.3529 8.2941 17.3031 8.36596 17.2397L14.6517 11.8449L20.9359 17.2397Z"
                             :fill="steps.secondStep.open ? '#130E67' : '#8A8A8A'" />
                     </svg>
 
                 </header>
-                <div v-if="steps.secondStep.open" class="time-slot">
-                    <div v-for="(item, index) in allTimeSlots" :key="index" @click="handleTimeSlotSelection(item.id)"
-                        class="card gap-5 h-91" :class="{
-                            'disable': !isAvailableTimeSlot(item.id),
-                            'active': steps.secondStep.value == item.id,
+                <Transition name="fade">
 
-                        }">
-                        <div :class="{ 'disable-span': !isAvailableTimeSlot(item.id), 'active-span': steps.secondStep.value == item.id, }"
-                            class="text-gray" v-html="item.svg"></div>
-                        <div>
-                            <span
-                                :class="{ 'disable-span': !isAvailableTimeSlot(item.id), 'active-span': steps.secondStep.value == item.id, }"
-                                class="text-sm text-gray">{{
-                                    item.label }}</span>
-                            <span
-                                :class="{ 'disable-span': !isAvailableTimeSlot(item.id), 'active-span': steps.secondStep.value == item.id, }"
-                                class="text-xs text-gray">{{
-                                    item.time }}</span>
+                    <div v-if="steps.secondStep.open" class="time-slot">
+                        <div v-for="(item, index) in allTimeSlots" :key="index"
+                            @click="handleTimeSlotSelection(item.id)" class="card gap-5 h-91" :class="{
+                                'disable': !isAvailableTimeSlot(item.id),
+                                'active': steps.secondStep.value == item.id,
+
+                            }">
+                            <div :class="{ 'disable-span': !isAvailableTimeSlot(item.id), 'active-span': steps.secondStep.value == item.id, }"
+                                class="text-gray" v-html="item.svg"></div>
+                            <div>
+                                <span
+                                    :class="{ 'disable-span': !isAvailableTimeSlot(item.id), 'active-span': steps.secondStep.value == item.id, }"
+                                    class="text-sm text-gray">{{
+                                        item.label }}</span>
+                                <span
+                                    :class="{ 'disable-span': !isAvailableTimeSlot(item.id), 'active-span': steps.secondStep.value == item.id, }"
+                                    class="text-xs text-gray">{{
+                                        item.time }}</span>
+                            </div>
+
                         </div>
-
                     </div>
-
-                </div>
+                </Transition>
 
             </div>
             <div class="step">
@@ -110,69 +115,73 @@
                         <h4 :class="{ 'text-gray-400': !steps.thirdStep.open && !steps.thirdStep.value }">
                             Session Type</h4>
                     </div>
-                    <svg :class="{ 'rotate-180': steps.thirdStep.open }" class="arrow-icon" width="28" height="28"
-                        viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg @click="toggle(2)" :class="{ 'rotate-180': steps.thirdStep.open }" class="arrow-icon"
+                        width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M20.9359 17.2397C21.0081 17.3017 21.093 17.3501 21.1858 17.3823C21.2786 17.4145 21.3774 17.4297 21.4767 17.4271C21.5759 17.4246 21.6737 17.4043 21.7643 17.3674C21.8549 17.3305 21.9367 17.2778 22.0049 17.2122C22.0731 17.1466 22.1264 17.0694 22.1618 16.9851C22.1972 16.9008 22.2139 16.811 22.2111 16.7208C22.2083 16.6305 22.186 16.5417 22.1454 16.4594C22.1048 16.377 22.0468 16.3027 21.9746 16.2407L15.171 10.4007C15.0307 10.2801 14.8449 10.2129 14.6517 10.2129C14.4586 10.2129 14.2727 10.2801 14.1324 10.4007L7.32804 16.2407C7.25429 16.3023 7.19473 16.3766 7.15283 16.4592C7.11093 16.5419 7.08753 16.6313 7.08397 16.7223C7.08042 16.8132 7.09678 16.9039 7.13212 16.9891C7.16746 17.0743 7.22106 17.1522 7.28982 17.2184C7.35858 17.2846 7.44111 17.3377 7.53264 17.3746C7.62417 17.4115 7.72286 17.4316 7.82299 17.4336C7.92311 17.4356 8.02267 17.4194 8.11588 17.3861C8.20909 17.3529 8.2941 17.3031 8.36596 17.2397L14.6517 11.8449L20.9359 17.2397Z"
                             :fill="steps.thirdStep.open ? '#130E67' : '#8A8A8A'" />
                     </svg>
 
                 </header>
-                <div v-if="steps.thirdStep.open" class="session">
+                <Transition name="fade">
 
-                    <div v-if="loadingSessionTypes" class="session-first-div">
-                        <div class="card gap-5 h-131">
-                            <div>
-                                <div class="icon" :class="{ 'skeleton': loadingSessionTypes }"></div>
-                                <h5 class="type" :class="{ 'skeleton': loadingSessionTypes }"></h5>
-                                <span class="location" :class="{ 'skeleton': loadingSessionTypes }"></span>
-                                <span class=" added" :class="{ 'skeleton': loadingSessionTypes }"></span>
+                    <div v-if="steps.thirdStep.open" class="session">
+
+                        <div v-if="loadingSessionTypes" class="session-first-div">
+                            <div class="card gap-5 h-131">
+                                <div>
+                                    <div class="icon" :class="{ 'skeleton': loadingSessionTypes }"></div>
+                                    <h5 class="type" :class="{ 'skeleton': loadingSessionTypes }"></h5>
+                                    <span class="location" :class="{ 'skeleton': loadingSessionTypes }"></span>
+                                    <span class=" added" :class="{ 'skeleton': loadingSessionTypes }"></span>
+
+                                </div>
 
                             </div>
-
+                            <div class="seats">
+                                <span :class="{ 'skeleton': loadingSessionTypes }"></span>
+                            </div>
                         </div>
-                        <div class="seats">
-                            <span :class="{ 'skeleton': loadingSessionTypes }"></span>
-                        </div>
-                    </div>
-                    <div v-for="(item, index) in sessionTypes" :key="index" class="session-first-div">
+                        <div v-for="(item, index) in sessionTypes" :key="index" class="session-first-div">
 
-                        <div @click="selectSessionType(item.id, item.courseScheduleId)"
-                            :class="{ 'active': steps.thirdStep.value == item.id, 'disable': item.availableSeats == 0 }"
-                            class="card gap-5 h-131">
-                            <div>
-                                <div style="height: fit-content;" v-html="sessionType[item.name]"></div>
-                                <h5 :class="{ 'disable-span': item.availableSeats == 0 }" class="type">{{ item.name }}
-                                </h5>
-                                <span :class="{ 'disable-span': item.availableSeats == 0 }" class="location">{{
-                                    item.location ?? 'Google Meet' }}</span>
-                                <span :class="{ 'disable-span': item.availableSeats == 0 }" class="added">+ ${{
-                                    item.priceModifier
+                            <div @click="selectSessionType(item.id, item.courseScheduleId)"
+                                :class="{ 'active': steps.thirdStep.value == item.id, 'disable': item.availableSeats == 0 }"
+                                class="card gap-5 h-131">
+                                <div>
+                                    <div style="height: fit-content;" v-html="sessionType[item.name]"></div>
+                                    <h5 :class="{ 'disable-span': item.availableSeats == 0 }" class="type">{{ item.name
+                                    }}
+                                    </h5>
+                                    <span :class="{ 'disable-span': item.availableSeats == 0 }" class="location">{{
+                                        item.location ?? 'Google Meet' }}</span>
+                                    <span :class="{ 'disable-span': item.availableSeats == 0 }" class="added">+ ${{
+                                        item.priceModifier
                                     }}</span>
 
+                                </div>
+                            </div>
+                            <div class="seats">
+                                <span v-if="item.availableSeats == 0">Fully Booked</span>
+                                <span class="warning" v-else-if="item.availableSeats < 5">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M14.8 11.7557L9.33437 2.26379C9.19779 2.03124 9.00281 1.83843 8.76875 1.70445C8.53469 1.57048 8.26969 1.5 8 1.5C7.73031 1.5 7.4653 1.57048 7.23124 1.70445C6.99719 1.83843 6.8022 2.03124 6.66562 2.26379L1.2 11.7557C1.06858 11.9806 0.999329 12.2364 0.999329 12.4969C0.999329 12.7574 1.06858 13.0132 1.2 13.2382C1.33483 13.4721 1.52948 13.666 1.76397 13.7999C1.99847 13.9338 2.26436 14.0028 2.53437 14H13.4656C13.7354 14.0026 14.0011 13.9334 14.2353 13.7996C14.4696 13.6657 14.664 13.4719 14.7987 13.2382C14.9304 13.0134 14.9998 12.7576 15 12.4971C15.0003 12.2366 14.9312 11.9807 14.8 11.7557ZM13.9331 12.7375C13.8855 12.8188 13.8171 12.886 13.7349 12.9321C13.6528 12.9782 13.5598 13.0017 13.4656 13H2.53437C2.44017 13.0017 2.34723 12.9782 2.26508 12.9321C2.18293 12.886 2.11452 12.8188 2.06687 12.7375C2.02371 12.6645 2.00095 12.5812 2.00095 12.4963C2.00095 12.4114 2.02371 12.3281 2.06687 12.255L7.5325 2.76317C7.58111 2.68227 7.64983 2.61534 7.73197 2.56887C7.81411 2.5224 7.90688 2.49797 8.00125 2.49797C8.09562 2.49797 8.18839 2.5224 8.27053 2.56887C8.35267 2.61534 8.42139 2.68227 8.47 2.76317L13.9356 12.255C13.9784 12.3283 14.0007 12.4118 14.0003 12.4966C13.9999 12.5815 13.9767 12.6647 13.9331 12.7375ZM7.5 9.00004V6.50004C7.5 6.36743 7.55268 6.24026 7.64645 6.14649C7.74021 6.05272 7.86739 6.00004 8 6.00004C8.13261 6.00004 8.25978 6.05272 8.35355 6.14649C8.44732 6.24026 8.5 6.36743 8.5 6.50004V9.00004C8.5 9.13265 8.44732 9.25983 8.35355 9.35359C8.25978 9.44736 8.13261 9.50004 8 9.50004C7.86739 9.50004 7.74021 9.44736 7.64645 9.35359C7.55268 9.25983 7.5 9.13265 7.5 9.00004ZM8.75 11.25C8.75 11.3984 8.70601 11.5434 8.6236 11.6667C8.54119 11.7901 8.42406 11.8862 8.28701 11.943C8.14997 11.9997 7.99917 12.0146 7.85368 11.9856C7.7082 11.9567 7.57456 11.8853 7.46967 11.7804C7.36478 11.6755 7.29335 11.5418 7.26441 11.3964C7.23547 11.2509 7.25032 11.1001 7.30709 10.963C7.36385 10.826 7.45998 10.7088 7.58332 10.6264C7.70666 10.544 7.85166 10.5 8 10.5C8.19891 10.5 8.38968 10.5791 8.53033 10.7197C8.67098 10.8604 8.75 11.0511 8.75 11.25Z"
+                                            fill="#F4A316" />
+                                    </svg>
+                                    Only {{ item.availableSeats }} Seats Remaining
+                                </span>
+                                <span v-else>{{ item.availableSeats
+                                }} Seats Available</span>
                             </div>
                         </div>
-                        <div class="seats">
-                            <span v-if="item.availableSeats == 0">Fully Booked</span>
-                            <span class="warning" v-else-if="item.availableSeats < 5">
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M14.8 11.7557L9.33437 2.26379C9.19779 2.03124 9.00281 1.83843 8.76875 1.70445C8.53469 1.57048 8.26969 1.5 8 1.5C7.73031 1.5 7.4653 1.57048 7.23124 1.70445C6.99719 1.83843 6.8022 2.03124 6.66562 2.26379L1.2 11.7557C1.06858 11.9806 0.999329 12.2364 0.999329 12.4969C0.999329 12.7574 1.06858 13.0132 1.2 13.2382C1.33483 13.4721 1.52948 13.666 1.76397 13.7999C1.99847 13.9338 2.26436 14.0028 2.53437 14H13.4656C13.7354 14.0026 14.0011 13.9334 14.2353 13.7996C14.4696 13.6657 14.664 13.4719 14.7987 13.2382C14.9304 13.0134 14.9998 12.7576 15 12.4971C15.0003 12.2366 14.9312 11.9807 14.8 11.7557ZM13.9331 12.7375C13.8855 12.8188 13.8171 12.886 13.7349 12.9321C13.6528 12.9782 13.5598 13.0017 13.4656 13H2.53437C2.44017 13.0017 2.34723 12.9782 2.26508 12.9321C2.18293 12.886 2.11452 12.8188 2.06687 12.7375C2.02371 12.6645 2.00095 12.5812 2.00095 12.4963C2.00095 12.4114 2.02371 12.3281 2.06687 12.255L7.5325 2.76317C7.58111 2.68227 7.64983 2.61534 7.73197 2.56887C7.81411 2.5224 7.90688 2.49797 8.00125 2.49797C8.09562 2.49797 8.18839 2.5224 8.27053 2.56887C8.35267 2.61534 8.42139 2.68227 8.47 2.76317L13.9356 12.255C13.9784 12.3283 14.0007 12.4118 14.0003 12.4966C13.9999 12.5815 13.9767 12.6647 13.9331 12.7375ZM7.5 9.00004V6.50004C7.5 6.36743 7.55268 6.24026 7.64645 6.14649C7.74021 6.05272 7.86739 6.00004 8 6.00004C8.13261 6.00004 8.25978 6.05272 8.35355 6.14649C8.44732 6.24026 8.5 6.36743 8.5 6.50004V9.00004C8.5 9.13265 8.44732 9.25983 8.35355 9.35359C8.25978 9.44736 8.13261 9.50004 8 9.50004C7.86739 9.50004 7.74021 9.44736 7.64645 9.35359C7.55268 9.25983 7.5 9.13265 7.5 9.00004ZM8.75 11.25C8.75 11.3984 8.70601 11.5434 8.6236 11.6667C8.54119 11.7901 8.42406 11.8862 8.28701 11.943C8.14997 11.9997 7.99917 12.0146 7.85368 11.9856C7.7082 11.9567 7.57456 11.8853 7.46967 11.7804C7.36478 11.6755 7.29335 11.5418 7.26441 11.3964C7.23547 11.2509 7.25032 11.1001 7.30709 10.963C7.36385 10.826 7.45998 10.7088 7.58332 10.6264C7.70666 10.544 7.85166 10.5 8 10.5C8.19891 10.5 8.38968 10.5791 8.53033 10.7197C8.67098 10.8604 8.75 11.0511 8.75 11.25Z"
-                                        fill="#F4A316" />
-                                </svg>
-                                Only {{ item.availableSeats }} Seats Remaining
-                            </span>
-                            <span v-else>{{ item.availableSeats
-                            }} Seats Available</span>
-                        </div>
                     </div>
-                </div>
-
+                </Transition>
             </div>
             <div>
             </div>
         </div>
+
         <div class="price">
             <div>
                 <h4 class="text-l text-gray-400">Total Price</h4>
@@ -191,6 +200,7 @@
                 Enroll Now
             </button>
         </div>
+
         <div>
             <NotifyComponent v-if="status" :status="status" />
         </div>
@@ -229,7 +239,19 @@ const steps = reactive<Record<typeof stepTypes[number], { open: boolean, value: 
     thirdStep: { open: false, value: null },
 });
 
+const toggle = (index: number) => {
+    if (index > 0) {
+        const PervStepKey = stepTypes[index - 1];
+        if (PervStepKey && steps[PervStepKey].value === null) {
+            return;
+        }
+    }
+    const stepKey = stepTypes[index]
+    if (stepKey)
+        steps[stepKey].open = !steps[stepKey].open
 
+
+};
 
 
 const { data: weekSchedules } = await useFetch<any>(`courses/${props.courseId}/weekly-schedules`, {
@@ -360,6 +382,11 @@ const handleEnroll = () => {
 
 </script>
 <style scoped>
+.arrow-icon {
+    cursor: pointer;
+    transition: ease-in-out 300ms;
+}
+
 .rotate-180 {
     transform: rotate(180deg);
 }
@@ -417,6 +444,17 @@ h4 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
 }
 
 .session-first-div {

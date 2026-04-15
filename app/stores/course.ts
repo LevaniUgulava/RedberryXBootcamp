@@ -56,7 +56,6 @@ export const useCourseStore = defineStore('course', () => {
                     Authorization: `Bearer ${authStore.token}`,
                 }
             })
-
         } catch (err) {
             console.error('Error submitting rating:', err);
         }

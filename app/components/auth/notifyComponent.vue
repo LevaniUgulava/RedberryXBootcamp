@@ -15,7 +15,7 @@
         </div>
         <div class="button">
             <button
-                @click="ui.isNoAuth ? modalStore.toggleModal('auth', true) : modalStore.toggleModal('profile', true)"
+                @click="ui.isNoAuth ? modalStore.toggleModal('auth', true, 'login') : modalStore.toggleModal('profile', true)"
                 class="btn">
                 {{ ui.btn }}
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
