@@ -16,7 +16,7 @@
                                 d="M9 2L11.47 6.91L17 7.71L13 11.52L13.94 17L9 14.47L4.06 17L5 11.52L1 7.71L6.53 6.91L9 2Z"
                                 fill="#F4A316" />
                         </svg>
-                        <span class="rating-value">4.9</span>
+                        <span class="rating-value">{{ props.item?.course.avgRating }}</span>
                     </div>
                 </div>
                 <div class="card-name">
