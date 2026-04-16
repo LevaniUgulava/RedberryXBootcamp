@@ -39,7 +39,7 @@
                                     <span>Your learning journey starts here! </span>
                                     <span>Browse courses to get started.</span>
                                 </div>
-                                <button class="next-button">
+                                <button @click="redirect" class="next-button">
                                     Browse Courses
                                 </button>
                             </div>
@@ -64,12 +64,16 @@ import EnrolledCard from './cards/EnrolledCard.vue';
 const props = defineProps<{
     state: boolean;
 }>();
+const router = useRouter();
 const config = useRuntimeConfig();
 const authStore = useAuthStore();
 const quantity = ref<number>(1);
 const emit = defineEmits(['close']);
 const closeModal = () => {
     emit('close');
+}
+const redirect = () => {
+    router.push('/courses');
 }
 
 const { data: enrollments, pending } = await useFetch('/courses/in-progress', {
@@ -181,6 +185,7 @@ header span {
     line-height: 24px;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
 
