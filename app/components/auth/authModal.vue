@@ -331,6 +331,8 @@ const handleSignUp = async () => {
             username: form.username,
             avatar: form.avatar
         });
+        closeModal();
+
     } catch (error: any) {
         const apiErrors = error.data?.errors;
         if (apiErrors) {
