@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <div>
-                    <RateComponent v-if="ui.rating" :courseId="courseStore.lastAttempt?.courseId || ''" :isRated="isRated"
+                    <RateComponent v-if="ui.rating" :courseId="props.courseId || ''" :isRated="isRated"
                         :icon-shown="true" :rating="courseReview" />
                 </div>
                 <div class="buttons">
@@ -43,7 +43,9 @@ const props = defineProps<{
     type: 'profile' | 'congratulations' | 'conflict' | 'confirm';
     courseName?: string;
     time?: string;
+    courseId?: string
 }>()
+
 const handleLightClick = () => {
     if (props.type === 'profile') {
         modalStore.closeFeedback();

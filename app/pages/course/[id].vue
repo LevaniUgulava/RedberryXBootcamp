@@ -110,7 +110,7 @@
             <Transition name="modal-fade">
                 <FeedbackModal v-if="modalStore.feedback.isOpen" :type="modalStore.feedback.type"
                     :course-name="modalStore.feedback.courseName" :time="modalStore.feedback.details"
-                    :item="course.reviews" />
+                    :item="course.reviews" :course-id="courseId" />
             </Transition>
 
         </div>
