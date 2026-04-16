@@ -74,6 +74,8 @@ const closeModal = () => {
 }
 const redirect = () => {
     router.push('/courses');
+    emit('close');
+
 }
 
 const { data: enrollments, pending } = await useFetch('/courses/in-progress', {
