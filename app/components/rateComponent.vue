@@ -52,8 +52,7 @@ const props = defineProps<
         iconShown?: boolean;
     }
 >()
-const myRating = ref(props.rating || 0);
-const handleClose = () => {
+const myRating = computed(() => props.rating || courseStore.ratingReview || 0); const handleClose = () => {
     emit('onClose');
 }
 
@@ -61,7 +60,6 @@ const isRatedWrapper = ref(props.isRated);
 const rate = (n: number) => {
     if (props.isRated) return;
     courseStore.rate(n, props.courseId);
-    myRating.value = n;
     isRatedWrapper.value = true;
 }
 

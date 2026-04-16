@@ -5,6 +5,7 @@ export const useCourseStore = defineStore('course', () => {
     const modalStore = useModalStore();
     const authStore = useAuthStore();
     const config = useRuntimeConfig();
+    const ratingReview = ref(0);
 
     const lastAttempt = ref<{ courseId: string, scheduleId: number } | null>(null);
 
@@ -46,7 +47,7 @@ export const useCourseStore = defineStore('course', () => {
 
     const rate = async (rating: number, courseId: string) => {
         try {
-            const response = await $fetch(`/courses/${courseId}/reviews`, {
+            const response = await $fetch<any>(`/courses/${courseId}/reviews`, {
                 baseURL: config.public.api,
                 method: 'POST',
                 body: {
@@ -56,6 +57,7 @@ export const useCourseStore = defineStore('course', () => {
                     Authorization: `Bearer ${authStore.token}`,
                 }
             })
+            ratingReview.value = response.data.rating
         } catch (err) {
             console.error('Error submitting rating:', err);
         }
@@ -63,6 +65,7 @@ export const useCourseStore = defineStore('course', () => {
     }
 
     return {
+        ratingReview,
         rate,
         Enrollment, lastAttempt
     }
